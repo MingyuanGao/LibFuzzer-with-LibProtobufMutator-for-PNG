@@ -1,0 +1,44 @@
+Build the Source Code
+=====================
+
+Under the top dir
+$ ./setup.sh
+
+This will set up libprotobuf, libprotobuf-mutator, libfuzzer and libpng
+
+Add "#include <cstdlib>" to libpng/contrib/oss-fuzz/libpng_read_fuzzer.cc 
+
+Under the top dir
+$ make 
+
+This will build all the code
+
+
+Convert PNG Seeds to Protobuf Seeds in Batch
+============================================
+
+Under the top dir
+$ ./convert2protobuf.sh png_seeds_dir protobuf_seeds_dir
+
+
+Convert Protobuf Seeds to PNG Seeds in Batch
+============================================
+
+Under the top dir
+$ ./convert2png.sh png_seeds_dir protobuf_seeds_dir
+
+
+Run the Fuzzer without Protobuf Seeds
+=====================================
+
+$ ./libpng_read_fuzzer_protobuf-mutator -rss_limit_mb=10240 -dict=png.dict 
+
+
+Run the Fuzzer with Protobuf Seeds
+==================================
+
+In libpng_read_fuzzer.cc (line 36), change the macro "DEFINE_PROTO_FUZZER" to "DEFINE_BINARY_PROTO_FUZZER"
+$ make
+
+$ ./libpng_read_fuzzer_protobuf-mutator -rss_limit_mb=10240 -dict=png.dict seeds-protobuf
+
