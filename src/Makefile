@@ -23,7 +23,7 @@ LDFLAGS  = $(COMMON_FLAGS) $(LIB_DIRS) -lz
 # targets
 ##############################
 
-all: libpng_read_fuzzer_protobuf-mutator png2protobuf protobuf2png print_png_info png2png 
+all: libpng_read_fuzzer_protobuf-mutator png2protobuf protobuf2png png2png print_png_info print_protobuf_info
 
 #---------------------------
 fuzzer = libpng_read_fuzzer_protobuf-mutator
@@ -44,6 +44,10 @@ protobuf2png : png.pb.o png_proto_util.o protobuf2png.o
 
 #---------------------------
 png2protobuf : png.pb.o png_proto_util.o png2protobuf.o  
+	$(CXX) -o $@ $^ $(LDFLAGS) $(PROTOBUF_LIBS) 
+
+#---------------------------
+print_protobuf_info : png.pb.o png_proto_util.o print_protobuf_info.o  
 	$(CXX) -o $@ $^ $(LDFLAGS) $(PROTOBUF_LIBS) 
 
 #---------------------------
@@ -78,5 +82,5 @@ build_libpng_with_fuzzer:
 ##############################
 .PHONY: clean 
 clean: 
-	rm -f $(fuzzer) protobuf2png png2protobuf print_png_info png2png *.o *.pb.cc *.pb.h *.log crash-* 
+	rm -f $(fuzzer) protobuf2png png2protobuf print_png_info print_protobuf_info png2png *.o *.pb.cc *.pb.h *.log crash-* 
 
